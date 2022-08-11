@@ -95,13 +95,11 @@ pipeline {
         }
         stage("Test_2") {
             options { timeout(time: 1, unit: "HOURS") }
+            input {
+                message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}"
+            }
             steps {
-                input {
-                    message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}"
-                }
-                steps {
-                    echo "done"
-                }
+                echo "done"
             }
         }
     }
