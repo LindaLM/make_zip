@@ -102,5 +102,12 @@ pipeline {
                 echo "done"
             }
         }
+        stage(D_N) {
+            when {environment name: 'D_N', value: 'true'}
+            options { timeout(time:1 , unit: "HOURS") }
+            steps {
+                echo "D_N"
+            }
+        }
     }
 }
