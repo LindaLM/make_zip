@@ -125,7 +125,7 @@ pipeline {
                 message "Acknowledge"
             }
             steps {
-                echo "${$RED}D_N acknowledged${NC}"
+                echo "${RED}D_N acknowledged${NC}"
             }
         }
         stage("D_N - D") {
