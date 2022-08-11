@@ -33,7 +33,7 @@ pipeline {
         stage('Prepare Workspace') {
             options { timeout(1) }
             steps {
-                git branch: "newBranch", 
+                git branch: "main", 
                 url: 'https://github.com/LindaLM/make_zip.git'
             }
         }
