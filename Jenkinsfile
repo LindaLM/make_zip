@@ -6,9 +6,9 @@ pipeline {
         string defaultValue: 'file2.xml', name: 'P_M', trim: true
         string defaultValue: 'id', name: 'A_ID', trim: true
         string defaultValue: 'v0.0.0', name: 'R_VER',  trim: true
-        booleanParam defaultValue: true, name: 'DEPLOY_N'
-        booleanParam defaultValue: true, name: 'DEPLOY_C'
-        booleanParam defaultValue: true, name: 'DEPLOY_D'
+        booleanParam defaultValue: true, name: 'D_N'
+        booleanParam defaultValue: true, name: 'D_C'
+        booleanParam defaultValue: true, name: 'D_D'
         booleanParam defaultValue: true, name: 'MERGE'
         choice choices: ['aaaa', 'bbbb'], name: 'VERSION'
         choice choices: ['0.1', '2.2'], name: 'LINE'
