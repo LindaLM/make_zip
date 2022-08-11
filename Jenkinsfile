@@ -31,7 +31,7 @@ pipeline {
                 echo "${RED}Workspace cleaned ${NC}"
             }
         }
-        stage('Prepare Workspace') {
+        stage("Prepare Workspace") {
             options { timeout(1) }
             steps {
                 git branch: "main", 
@@ -96,7 +96,7 @@ pipeline {
         stage("Test 2") {
             options { timeout(time: 1, unit: "HOURS") }
             input {
-                message "${env.GREEN}Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL} ${env.NC}"
+                message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}!"
             }
             steps {
                 echo "done"
@@ -105,7 +105,7 @@ pipeline {
         stage("Test 3") {
             options { timeout(time: 1, unit: "HOURS") }
             input {
-                message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}"
+                message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}!"
             }
             steps {
                 echo "done"
