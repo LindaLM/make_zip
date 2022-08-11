@@ -50,9 +50,18 @@ pipeline {
                 echo "${RED}Build${NC}"
             }
         }
-        stage ("make_zip") {
+        stage ("Make_zip") {
             steps {
                 sh './zip_file.sh'
+                echo "${GREEN} You can download zip file now${NC}"
+            }
+        }
+        stage ("Test") {
+            options { timeout(time: 12, unit: 'SECONDS') }
+            steps {
+                echo "${RED}Testing ... ${NC}"
+                sh 'sleep 10s'
+                echo "${RED}Tested${NC}"
             }
         }
     }
