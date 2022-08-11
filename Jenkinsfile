@@ -96,7 +96,7 @@ pipeline {
         stage("Test 2") {
             options { timeout(time: 1, unit: "HOURS") }
             input {
-                message "${GREEN}Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL} ${NC}"
+                message "${env.GREEN}Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL} ${env.NC}"
             }
             steps {
                 echo "done"
