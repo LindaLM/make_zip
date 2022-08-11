@@ -51,7 +51,7 @@ pipeline {
                 echo "${RED}Build${NC}"
             }
         }
-        stage ("Test_1") {
+        stage ("Test 1") {
             options { timeout(time: 12, unit: 'SECONDS') }
             steps {
                 echo "${RED}Testing ... ${NC}"
@@ -93,7 +93,16 @@ pipeline {
                 }
             }
         }
-        stage("Test_2") {
+        stage("Test 2") {
+            options { timeout(time: 1, unit: "HOURS") }
+            input {
+                message "${GREEN}Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL} ${NC}"
+            }
+            steps {
+                echo "done"
+            }
+        }
+        stage("Test 3") {
             options { timeout(time: 1, unit: "HOURS") }
             input {
                 message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}"
@@ -102,11 +111,36 @@ pipeline {
                 echo "done"
             }
         }
-        stage(D_N) {
+        stage("D_N - S") {
             when {environment name: 'D_N', value: 'true'}
             options { timeout(time:1 , unit: "HOURS") }
             steps {
                 echo "D_N"
+            }
+        }
+        stage("D_N - A") {
+            when {environment name: 'D_N', value: 'true'}
+            options { timeout(time:1 , unit: "HOURS") }
+            input {
+                message "Acknowledge"
+            }
+            steps {
+                echo "D_N acknowledged"
+            }
+        }
+        stage("D_N - D") {
+            when {environment name: 'D_N', value: 'true'}
+            options { timeout(time:1 , unit: "HOURS") }
+            steps {
+                echo "D_N - D"
+            }
+        }
+        stage("B4K") {
+            when{ allOf { environment name: LINE, value: '2.2';
+                            environment name: B4K, value: '0.1'} }
+            options { timeout(time: 3, unit: "HOURS")}
+            steps {
+                echo "${RED}B4K${NC}"
             }
         }
     }
