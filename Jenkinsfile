@@ -21,6 +21,7 @@ pipeline {
     environment {
         RED='\033[0;31m'
         GREEN='\033[0;32m'
+        YEL='\033[0;33m'
         NC='\033[0m'
     }
     
@@ -170,9 +171,9 @@ pipeline {
     }
     post {
         aborted { echo "${RED}ABORTED${NC}"}
-        changed { echo "${RED}CHANDED${NC}"}
+        changed { echo "${YEL}CHANDED${NC}"}
         failure { echo "${RED}FAILURE${NC}"}
         success { echo "${GREEN}SUCCESS${NC}"}
-        unstable {echo "${RED}UNSTABLE${NC}"}
+        unstable {echo "${YEL}UNSTABLE${NC}"}
     }
 }
