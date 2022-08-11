@@ -51,18 +51,57 @@ pipeline {
                 echo "${RED}Build${NC}"
             }
         }
-        stage ("Make_zip") {
-            steps {
-                sh './zip_file.sh'
-                echo "${GREEN} You can download zip file now${NC}"
-            }
-        }
-        stage ("Test") {
+        stage ("Test_1") {
             options { timeout(time: 12, unit: 'SECONDS') }
             steps {
                 echo "${RED}Testing ... ${NC}"
                 sh 'sleep 10s'
                 echo "${RED}Tested${NC}"
+            }
+        }
+        stage("Analysis") {
+            options { timeout(time: 3, unit: "HOURS") }
+            steps {
+                echo "${RED}Analysis done${NC}"
+            }
+        }
+        stage("List"){
+            options { timeout(time: 1, unit: "HOURS") }
+            steps {
+                echo "${RED}List generated${NC}"
+            }
+        }
+
+        stage("Archive") {
+            options{ timeout(time: 1, unit: "HOURS") }
+            parallel {
+                stage ("0.1") {
+                    when {environment name: 'LINE', value: '0.1'}
+                    steps {
+                        echo "line = 0.1"
+                        sh './zip_file.sh l_0.1.txt'
+                        echo "${RED}archived${NC}"
+                    }
+                }
+                stage ("2.2") {
+                    when {environment name: 'LINE', value: '2.2'}
+                    steps {
+                        echo "line = 2.2"
+                        sh './zip_file.sh l_2.2.txt'
+                        echo "${RED}archived${NC}"
+                    }
+                }
+            }
+        }
+        stage("Test_2") {
+            options { timeout(time: 1, unit: "HOURS") }
+            steps {
+                input {
+                    message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}"
+                }
+                steps {
+                    echo "done"
+                }
             }
         }
     }
