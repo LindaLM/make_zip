@@ -137,11 +137,42 @@ pipeline {
         }
         stage("B4K") {
             when{ allOf { environment name: LINE, value: '2.2';
-                            environment name: B4K, value: '0.1'} }
+                            environment name: B4K, value: 'true'} }
             options { timeout(time: 3, unit: "HOURS")}
             steps {
                 echo "${RED}B4K${NC}"
             }
         }
+        stage("B4K - A") {
+            when{ allOf { environment name: LINE, value: '2.2';
+                            environment name: B4K, value: 'true'} } 
+            options { timeout(time: 1, unit: "HOURS") }
+            steps {
+                echo "${RED}B4K - A${NC}"
+            }
+        }
+        stage("B4K - N") {
+            when{ allOf { environment name: LINE, value: '2.2';
+                            environment name: B4K, value: 'true';
+                            environment name: D_N, value: 'true'} } 
+            options { timeout(time: 1, unit: "HOURS") }
+            steps {
+                echo "${RED}B4K - N${NC}"
+            }
+        }
+        stage("Ver"){
+            when { environment name: D_N, value: 'true'}
+            options { timeout(time: 1, unit: "HOURS") }
+            steps {
+                echo "${RED}ver${NC}"
+            }
+        }
+    }
+    post {
+        aborted { echo "${RED}ABORTED${NC}"}
+        changed { echo "${RED}CHANDED${NC}"}
+        failure { echo "${RED}FAILURE${NC}"}
+        success { echo "${GREEN}SUCCESS${NC}"}
+        unstable {echo "${RED}UNSTABLE${NC}"}
     }
 }
