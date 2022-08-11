@@ -99,7 +99,7 @@ pipeline {
                 message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}!"
             }
             steps {
-                echo "done"
+                echo "${RED}Test 2 proceded${NC}"
             }
         }
         stage("Test 3") {
@@ -108,14 +108,14 @@ pipeline {
                 message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}!"
             }
             steps {
-                echo "done"
+                echo "${RED}Test 3 proceded${NC}"
             }
         }
         stage("D_N - S") {
             when {environment name: 'D_N', value: 'true'}
             options { timeout(time:1 , unit: "HOURS") }
             steps {
-                echo "D_N"
+                echo "${RED}D_N - S${NC}"
             }
         }
         stage("D_N - A") {
@@ -125,14 +125,14 @@ pipeline {
                 message "Acknowledge"
             }
             steps {
-                echo "D_N acknowledged"
+                echo "${$RED}D_N acknowledged${NC}"
             }
         }
         stage("D_N - D") {
             when {environment name: 'D_N', value: 'true'}
             options { timeout(time:1 , unit: "HOURS") }
             steps {
-                echo "D_N - D"
+                echo "${RED}D_N - D${NC}"
             }
         }
         stage("B4K") {
@@ -160,11 +160,11 @@ pipeline {
                 echo "${RED}B4K - N${NC}"
             }
         }
-        stage("Ver"){
+        stage("Verification"){
             when { environment name: 'D_N', value: 'true'}
             options { timeout(time: 1, unit: "HOURS") }
             steps {
-                echo "${RED}ver${NC}"
+                echo "${RED}Verified${NC}"
             }
         }
     }
