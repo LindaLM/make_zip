@@ -14,6 +14,7 @@ pipeline {
         choice choices: ['0.1', '2.2'], description: 'Please choose LINE', name: 'LINE'
         booleanParam defaultValue: true, description: 'Please enter if you want TXT', name: 'TXT'
         booleanParam defaultValue: true, description: 'Please enter if you want B4K', name: 'B4K'
+        gitParameter branchFilter: 'origin/(.*)', defaultValue: 'main', name: 'BRANCH', type: 'PT_BRANCH'
     }
     options {
         ansiColor('xterm')
