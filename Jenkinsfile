@@ -36,7 +36,7 @@ pipeline {
         stage("Prepare Workspace") {
             options { timeout(1) }
             steps {
-                git branch: "main", 
+                git branch: "${params.BRANCH}",
                 url: 'https://github.com/LindaLM/make_zip.git'
             }
         }
