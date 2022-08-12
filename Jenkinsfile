@@ -14,6 +14,7 @@ pipeline {
         choice choices: ['0.1', '2.2'], name: 'LINE'
         booleanParam defaultValue: true, name: 'TXT'
         booleanParam defaultValue: true, name: 'B4K'
+        gitParameter branchFilter: 'origin/(.*)', defaultValue: 'main', name: 'BRANCH', type: 'PT_BRANCH'
     }
     options {
         ansiColor('xterm')
@@ -35,7 +36,7 @@ pipeline {
         stage("Prepare Workspace") {
             options { timeout(1) }
             steps {
-                git branch: "main", 
+                git branch: "${params.BRANCH}", 
                 url: 'https://github.com/LindaLM/make_zip.git'
             }
         }
