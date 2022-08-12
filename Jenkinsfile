@@ -58,7 +58,7 @@ pipeline {
             options { timeout(time: 12, unit: 'SECONDS') }
             steps {
                 echo "${RED}Testing ... ${NC}"
-                sh 'sleep 10s'
+                sh 'sleep 5s'
                 echo "${RED}Tested${NC}"
             }
         }
@@ -71,6 +71,7 @@ pipeline {
         stage("List"){
             options { timeout(time: 10, unit: "SECONDS") }
             steps {
+                sh 'sleep 5s'
                 echo "${RED}List generated${NC}"
             }
         }
@@ -118,6 +119,7 @@ pipeline {
             when {environment name: 'D_N', value: 'true'}
             options { timeout(time:10 , unit: "SECONDS") }
             steps {
+                sh 'sleep 5s'
                 echo "${RED}D_N - S${NC}"
             }
         }
@@ -167,6 +169,7 @@ pipeline {
             when { environment name: 'D_N', value: 'true'}
             options { timeout(time: 10, unit: "SECONDS") }
             steps {
+                sh 'sleep 5s'
                 echo "${RED}Verified${NC}"
             }
         }
