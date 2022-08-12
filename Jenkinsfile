@@ -2,21 +2,22 @@ pipeline {
     agent any
     
     parameters {
-        string defaultValue: 'file.xml', name: 'M', trim: true
-        string defaultValue: 'file2.xml', name: 'P_M', trim: true
-        string defaultValue: 'id', name: 'A_ID', trim: true
-        string defaultValue: 'v0.0.0', name: 'R_VER',  trim: true
-        booleanParam defaultValue: true, name: 'D_N'
-        booleanParam defaultValue: true, name: 'D_C'
-        booleanParam defaultValue: true, name: 'D_D'
-        booleanParam defaultValue: true, name: 'MERGE'
-        choice choices: ['aaaa', 'bbbb'], name: 'VERSION'
-        choice choices: ['0.1', '2.2'], name: 'LINE'
-        booleanParam defaultValue: true, name: 'TXT'
-        booleanParam defaultValue: true, name: 'B4K'
+        string defaultValue: 'file.xml', description: 'Please enter the name of M file for this release', name: 'M', trim: true
+        string defaultValue: 'file2.xml', description: 'Please enter the name of P_M filr for this release', name: 'P_M', trim: true
+        string defaultValue: 'id', description: 'Please enter the A_ID for this release', name: 'A_ID', trim: true
+        string defaultValue: 'v0.0.0', description: 'Please enter the R_VER for this release', name: 'R_VER',  trim: true
+        booleanParam defaultValue: true, description: 'Please enter if you want D_N', name: 'D_N'
+        booleanParam defaultValue: true, description: 'Please enter if you want D_C', name: 'D_C'
+        booleanParam defaultValue: true, description: 'Please enter if you want D_D', name: 'D_D'
+        booleanParam defaultValue: true, description: 'Please enter if you want to MERGE branches', name: 'MERGE'
+        choice choices: ['w', 'q'], description: 'Please choose R_VAR', name: 'R_VAR'
+        choice choices: ['0.1', '2.2'], description: 'Please choose LINE', name: 'LINE'
+        booleanParam defaultValue: true, description: 'Please enter if you want TXT', name: 'TXT'
+        booleanParam defaultValue: true, description: 'Please enter if you want B4K', name: 'B4K'
     }
     options {
         ansiColor('xterm')
+        timestamps()
     }
     environment {
         RED='\033[0;31m'
@@ -33,7 +34,7 @@ pipeline {
             }
         }
         stage("Prepare Workspace") {
-            options { timeout(1) }
+            options { timeout(2) }
             steps {
                 git branch: "main", 
                 url: 'https://github.com/LindaLM/make_zip.git'
@@ -42,12 +43,12 @@ pipeline {
         stage ("Set") {
             steps {
                 echo "${LINE}_${VERSION}"
-                sh 'sleep 9s'
+                sh 'sleep 5s'
                 echo "${RED}Set ${NC}"
             }
         }
         stage ("Build") {
-            options { timeout(time: 3, unit: 'HOURS') }
+            options { timeout(time: 13, unit: 'SECONDS') }
             steps{
                 echo "${RED}Build${NC}"
             }
@@ -61,20 +62,20 @@ pipeline {
             }
         }
         stage("Analysis") {
-            options { timeout(time: 3, unit: "HOURS") }
+            options { timeout(time: 13, unit: "SECONDS") }
             steps {
                 echo "${RED}Analysis done${NC}"
             }
         }
         stage("List"){
-            options { timeout(time: 1, unit: "HOURS") }
+            options { timeout(time: 10, unit: "SECONDS") }
             steps {
                 echo "${RED}List generated${NC}"
             }
         }
 
         stage("Archive") {
-            options{ timeout(time: 1, unit: "HOURS") }
+            options{ timeout(2) }
             parallel {
                 stage ("0.1") {
                     when {environment name: 'LINE', value: '0.1'}
@@ -95,7 +96,7 @@ pipeline {
             }
         }
         stage("Test 2") {
-            options { timeout(time: 1, unit: "HOURS") }
+            options { timeout(10) }
             input {
                 message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}!"
             }
@@ -104,7 +105,7 @@ pipeline {
             }
         }
         stage("Test 3") {
-            options { timeout(time: 1, unit: "HOURS") }
+            options { timeout(10) }
             input {
                 message "Please download and test zip and press PROCEED to continue: \n ${env.BUILD_URL}!"
             }
@@ -114,14 +115,14 @@ pipeline {
         }
         stage("D_N - S") {
             when {environment name: 'D_N', value: 'true'}
-            options { timeout(time:1 , unit: "HOURS") }
+            options { timeout(time:10 , unit: "SECONDS") }
             steps {
                 echo "${RED}D_N - S${NC}"
             }
         }
         stage("D_N - A") {
             when {environment name: 'D_N', value: 'true'}
-            options { timeout(time:1 , unit: "HOURS") }
+            options { timeout(time:10 , unit: "SECONDS") }
             input {
                 message "Acknowledge"
             }
@@ -131,7 +132,7 @@ pipeline {
         }
         stage("D_N - D") {
             when {environment name: 'D_N', value: 'true'}
-            options { timeout(time:1 , unit: "HOURS") }
+            options { timeout(time:10 , unit: "SECONDS") }
             steps {
                 echo "${RED}D_N - D${NC}"
             }
@@ -139,7 +140,7 @@ pipeline {
         stage("B4K") {
             when{ allOf { environment name: 'LINE', value: '2.2';
                             environment name: 'B4K', value: 'true'} }
-            options { timeout(time: 3, unit: "HOURS")}
+            options { timeout(time: 13, unit: "SECONDS")}
             steps {
                 echo "${RED}B4K${NC}"
             }
@@ -147,7 +148,7 @@ pipeline {
         stage("B4K - A") {
             when{ allOf { environment name: 'LINE', value: '2.2';
                             environment name: 'B4K', value: 'true'} } 
-            options { timeout(time: 1, unit: "HOURS") }
+            options { timeout(time: 10, unit: "SECONDS") }
             steps {
                 echo "${RED}B4K - A${NC}"
             }
@@ -156,14 +157,14 @@ pipeline {
             when{ allOf { environment name: 'LINE', value: '2.2';
                             environment name: 'B4K', value: 'true';
                             environment name: 'D_N', value: 'true'} } 
-            options { timeout(time: 1, unit: "HOURS") }
+            options { timeout(time: 10, unit: "SECONDS") }
             steps {
                 echo "${RED}B4K - N${NC}"
             }
         }
         stage("Verification"){
             when { environment name: 'D_N', value: 'true'}
-            options { timeout(time: 1, unit: "HOURS") }
+            options { timeout(time: 10, unit: "SECONDS") }
             steps {
                 echo "${RED}Verified${NC}"
             }
@@ -174,6 +175,12 @@ pipeline {
         changed { echo "${YEL}CHANDED${NC}"}
         failure { echo "${RED}FAILURE${NC}"}
         success { echo "${GREEN}SUCCESS${NC}"}
-        unstable {echo "${YEL}UNSTABLE${NC}"}
+        unstable { echo "${YEL}UNSTABLE${NC}"}
+
+        always {
+            script {
+                currentBuild.description = "Release ${env.LINE}_${env.R_V}_${env.R_VER}"
+            }
+        }
     }
 }
